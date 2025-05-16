@@ -1,0 +1,68 @@
+.idea {
+  margin-bottom: 20px;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background-color: #f9f9f9;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.idea form {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.idea input[type="text"] {
+  flex-grow: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.ideaButton {
+  background-color: #a8a8a8;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.ideaButtonActive {
+  background-color: #5cb85c;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.idea button[type="submit"]:hover {
+  background-color: #4cae4c;
+}
+
+.ideaName {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 5px;
+  flex-grow: 1;
+}
+
+.ideaCount {
+  font-size: 22px;
+  color: #777;
+  /* background-color: aqua; */
+}
+
+hr {
+  border: 1px solid #eee;
+  margin: 20px 0;
+}
