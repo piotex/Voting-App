@@ -1,0 +1,32 @@
+.insertIdea {
+  margin-bottom: 20px;
+  padding: 15px;
+  border: 1px solid #f0f0f0;
+  background-color: #fafafa;
+  border-radius: 4px;
+}
+
+.insertIdea h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.insertIdea input[type="text"] {
+  padding: 8px;
+  margin-right: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.insertIdea button {
+  padding: 8px 12px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.insertIdea button:hover {
+  background-color: #218838;
+}

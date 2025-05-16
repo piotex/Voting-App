@@ -1,20 +1,24 @@
-import React, { useState } from "react";
-import logo from "./logo.svg";
-import "./App.css";
+import React from "react";
+import styles from "./styles/App.module.css";
 import { IdeaList } from "./components/IdeaList";
-import { Idea } from "./components/Idea";
+import useFetchIdeas from "./hooks/useFetchIdeas";
 
 function App() {
-  const [ideaList, setIdeaList] = useState([
-    { ideaName: "pomysł za 1.000.000", ideaCount: 13 },
-    { ideaName: "pomysł za 1.000", ideaCount: 7 },
-    { ideaName: "pomysł za 5.000", ideaCount: 23 },
-  ]);
+  const { ideaList, loading, error } = useFetchIdeas();
+
+  if (loading) {
+    return <div>Ładowanie pomysłów...</div>;
+  }
+
+  if (error) {
+    return <div>Wystąpił błąd podczas ładowania pomysłów.</div>;
+  }
 
   return (
-    <>
-      <IdeaList ideaList={ideaList}></IdeaList>
-    </>
+    <div className={styles.app}>
+      <h1>Lista Pomysłów</h1>
+      <IdeaList ideaList={ideaList} />
+    </div>
   );
 }
 

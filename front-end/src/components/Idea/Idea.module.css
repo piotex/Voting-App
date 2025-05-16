@@ -1,0 +1,31 @@
+.idea {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.ideaButton {
+  padding: 8px 12px;
+  margin-right: 10px;
+  cursor: pointer;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+}
+
+.ideaButtonActive {
+  composes: ideaButton;
+  background-color: #28a745;
+}
+
+.ideaName {
+  flex-grow: 1;
+  font-weight: bold;
+}
+
+.ideaCount {
+  color: #6c757d;
+}

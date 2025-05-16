@@ -1,0 +1,9 @@
+.ideaList {
+  padding: 20px;
+}
+
+.ideaList hr {
+  margin: 15px 0;
+  border: 0;
+  border-top: 1px solid #eee;
+}
