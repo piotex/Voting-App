@@ -1,0 +1,19 @@
+.button {
+  background-color: #3b82f6; /* niebieski - tailwind bg-blue-500 */
+  color: white;
+  font-weight: 700; /* bold */
+  padding: 0.5rem 1rem; /* py-2 px-4 */
+  border-radius: 0.375rem; /* rounded (6px) */
+  border: none;
+  cursor: pointer;
+  outline: none;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.button:hover {
+  background-color: #1e40af; /* ciemniejszy niebieski - tailwind bg-blue-700 */
+}
+
+.button:focus {
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5); /* efekt focus: shadow-outline */
+}

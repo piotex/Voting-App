@@ -1,0 +1,9 @@
+.card {
+  background-color: white;
+  border-radius: 0.5rem; /* opcjonalnie, by wyglądało jak karta */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* lekki cień */
+}
+
+.card-content {
+  padding: 1rem; /* odpowiada p-4 */
+}

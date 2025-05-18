@@ -1,0 +1,15 @@
+.input {
+  flex: 1 1 auto; /* flex-grow i flex-shrink */
+  padding: 0.5rem 1rem; /* py-2 px-4 */
+  border: 1px solid #d1d5db; /* szary border (tailwind border-gray-300) */
+  border-radius: 0.75rem; /* rounded-xl (12px) */
+  outline: none;
+  transition: box-shadow 0.3s ease;
+  font-size: 1rem;
+  font-family: inherit;
+}
+
+.input:focus {
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5); /* focus:shadow-outline */
+  border-color: #3b82f6; /* opcjonalnie zmiana koloru border na niebieski */
+}
