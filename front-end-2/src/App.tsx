@@ -1,14 +1,13 @@
 // AppIdeas.tsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import "./App.css";
 import { Input } from "./components/ui/Input";
 import { Button } from "./components/ui/Button";
+import { useFetchIdeas } from "./hooks/useFetchIdeas";
+import { useIdeaVoting } from "./hooks/useIdeaVoting";
+import { useAddNewIdea } from "./hooks/useAddNewIdea";
 import { IdeaCard } from "./components/ui/IdeaCard";
-
-interface IdeaFromBackend {
-  idea_name: string;
-  idea_count: number;
-}
+import { useSubmitIdea } from "./hooks/useSubmitIdea";
 
 interface Idea {
   id: number;
@@ -18,63 +17,32 @@ interface Idea {
 }
 
 function AppIdeas() {
-  const [newIdea, setNewIdea] = useState("");
   const [ideas, setIdeas] = useState<Idea[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [selectedIdeaId, setSelectedIdeaId] = useState<number | null>(null);
+  const [newIdea, setNewIdea] = useState("");
+  const resetNewIdea = useCallback(() => setNewIdea(""), [setNewIdea]);
+  const { handleInputChange } = useAddNewIdea(ideas, setIdeas, resetNewIdea);
+  const {
+    ideas: fetchedIdeas,
+    loading,
+    error,
+    refetch: refetchIdeas,
+  } = useFetchIdeas("http://127.0.0.1:5000/get_idea_list");
+  const { handleVote } = useIdeaVoting(setIdeas);
+  const { isSubmitting, submitError, submitIdea } = useSubmitIdea();
 
   useEffect(() => {
-    const fetchIdeas = async () => {
-      try {
-        const response = await fetch("http://127.0.0.1:5000/get_idea_list");
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data: IdeaFromBackend[] = await response.json();
-        // Przekształć dane z backendu do formatu używanego przez frontend
-        const formattedIdeas = data.map((item, index) => ({
-          id: index + 1, // Możesz potrzebować bardziej unikalnego ID z backendu
-          title: item.idea_name,
-          votes: item.idea_count,
-        }));
-        setIdeas(formattedIdeas);
-      } catch (e: any) {
-        setError("Wystąpił problem podczas pobierania danych.");
-        console.error("Błąd pobierania danych:", e);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchIdeas();
-  }, []); // Pusta tablica zależności oznacza, że efekt uruchomi się tylko raz po pierwszym renderze
-
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNewIdea(event.target.value);
-  };
-
-  const handleAddIdea = () => {
-    if (newIdea.trim()) {
-      // Tutaj logika dodawania nowego pomysłu do backendu byłaby potrzebna
-      // Na razie dodajemy tylko do stanu lokalnego (należy to zaktualizować)
-      setIdeas([...ideas, { id: Date.now(), title: newIdea, votes: 0 }]);
-      setNewIdea("");
+    if (fetchedIdeas) {
+      setIdeas(fetchedIdeas);
     }
-  };
+  }, [fetchedIdeas, setIdeas]);
 
-  const handleVote = (id: number) => {
-    if (selectedIdeaId === id) return;
-    setIdeas(
-      ideas.map((idea) =>
-        idea.id === id
-          ? { ...idea, votes: idea.votes + 1, hasVoted: true }
-          : { ...idea, hasVoted: false }
-      )
-    );
-    setSelectedIdeaId(id);
-    // Tutaj logika wysyłania informacji o głosie do backendu byłaby potrzebna
-  };
+  const handleAddIdeaToServer = useCallback(async () => {
+    await submitIdea(newIdea, (newIdeaData) => {
+      // Po pomyślnym dodaniu, odśwież listę pomysłów
+      refetchIdeas();
+      resetNewIdea();
+    });
+  }, [newIdea, submitIdea, resetNewIdea, refetchIdeas]);
 
   if (loading) {
     return <div>Ładowanie pomysłów...</div>;
@@ -93,9 +61,14 @@ function AppIdeas() {
           onChange={handleInputChange}
           placeholder="Wprowadź nowy pomysł"
         />
-        <Button onClick={handleAddIdea} className="primary">
-          Dodaj
+        <Button
+          onClick={handleAddIdeaToServer}
+          className="primary"
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? "Dodawanie..." : "Dodaj"}
         </Button>
+        {submitError && <div className="error-message">{submitError}</div>}
       </div>
       <ul className="app-ideas-list">
         {ideas.map((idea) => (
