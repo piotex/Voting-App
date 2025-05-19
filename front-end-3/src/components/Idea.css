@@ -1,0 +1,26 @@
+.idea-container {
+  background: #f0f3ff;
+  margin-bottom: 16px;
+  padding: 16px 20px;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 1px 4px rgba(60, 60, 120, 0.04);
+}
+
+.idea-container.voted {
+  background: #d1ffd6;
+  border: 2px solid #2ecc40;
+}
+
+.idea-name {
+  font-weight: 500;
+  color: #3a3a7c;
+}
+
+.idea-votes {
+  font-size: 1.15rem;
+  color: #555;
+}
