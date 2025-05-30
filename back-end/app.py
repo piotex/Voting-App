@@ -115,10 +115,16 @@ def get_idea_list():
 
 @app.route('/vote/<option>', methods=['POST'])
 def vote(option):
-    if option not in idea_list:
+    if not option or not option.isdigit():
         return jsonify({'error': 'Invalid option'}), 400
+    
+    option = int(option)
+    if (option) not in idea_list_dict:
+        return jsonify({'error': 'Invalid option'}), 400
+    
     ip_address = request.remote_addr
-    vote_list[ip_address] = option
+    ip_address = int(time.time() * 1000000)         # workaround for my ip address
+    vote_list[ip_address] = int(option)
     return jsonify({'message': f'Vote for {option} recorded.'})
 
 
