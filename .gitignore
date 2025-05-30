@@ -197,3 +197,5 @@ cython_debug/
 /front-endnpm-debug.log*
 /front-endyarn-debug.log*
 /front-endyarn-error.log*
+
+/back-end/.venv
