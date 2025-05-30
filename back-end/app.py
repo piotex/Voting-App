@@ -6,14 +6,44 @@ import time
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": ["http://127.0.0.1:3000", "http://localhost:3000"]}})
 
-idea_list = {
-    1: "RenovaAI: Twój Inteligentny Remont Od A do Z",
-    2: "RenovaAI: Kompleksowa Platforma AI do Bezstresowych Remontów. Od Wizji po Realizację - Planowanie, Wykonawcy, Materiały w Jednym Miejscu.",
-    3: "Od Sadu do Stołu - Odkryj Smak, Zdrowie i Historię Najpopularniejszych Jego Owocu",
-    4: "Klucz do Przyszłości. Odkryj Potęgę Technologii - Od Programowania po Cyberbezpieczeństwo",
-    5: "Naucz Się Cieszyć Chwilą, Relaksować i Odnajdź Spokój Wraz ze Swoim",
-    6: "Poznaj Niezwykły Świat Mruczących Przyjaciół. Od Dzikich Łowców po Domowe Pieszczochy",
-}
+idea_list = [
+    {
+        "idea_id": 1,
+        "idea_name": "RenovaAI: Twój Inteligentny Remont Od A do Z",
+        "idea_description": "Kompleksowa Platforma AI do Bezstresowych Remontów. Od Wizji po Realizację - Planowanie, Wykonawcy, Materiały w Jednym Miejscu.",
+        "idea_background": "#D6F6D6"
+    },
+    {
+        "idea_id": 2,
+        "idea_name": "RenovaAI: Kompleksowa Platforma AI do Bezstresowych Remontów. Od Wizji po Realizację - Planowanie, Wykonawcy, Materiały w Jednym Miejscu.",
+        "idea_description": "Kompleksowa Platforma AI do Bezstresowych Remontów. Od Wizji po Realizację - Planowanie, Wykonawcy, Materiały w Jednym Miejscu.",
+        "idea_background": "#F8A1A1"
+    },
+    {
+        "idea_id": 3,
+        "idea_name": "konstantynopolitańczykowianeczka A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z.A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z.A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z.",
+        "idea_description": "Od Sadu do Stołu - Odkryj Smak, Zdrowie i Historię Najpopularniejszych Jego Owocu. Przewodnik po Jabłkach: Od Uprawy po Przepisy.",
+        "idea_background": "#FFEFCD"
+    },
+    {
+        "idea_id": 4,
+        "idea_name": "Klucz do Przyszłości. Odkryj Potęgę Technologii - Od Programowania po Cyberbezpieczeństwo",
+        "idea_description": "Klucz do Przyszłości. Odkryj Potęgę Technologii - Od Programowania po Cyberbezpieczeństwo. Twoja Droga do Świata IT.",
+        "idea_background": "#D6E8FF"
+    },
+    {
+        "idea_id": 5,
+        "idea_name": "Naucz Się Cieszyć Chwilą, Relaksować i Odnajdź Spokój Wraz ze Swoim",
+        "idea_description": "Naucz Się Cieszyć Chwilą, Relaksować i Odnajdź Spokój Wraz ze Swoim. Przewodnik po Mindfulness i Medytacji.",
+        "idea_background": "#FDF6D6"
+    },
+    {
+        "idea_id": 6,
+        "idea_name": "Poznaj Niezwykły Świat Mruczących Przyjaciół. Od Dzikich Łowców po Domowe Pieszczochy",
+        "idea_description": "Poznaj Niezwykły Świat Mruczących Przyjaciół. Od Dzikich Łowców po Domowe Pieszczochy. Przewodnik po Kocich Tajemnicach.",
+        "idea_background": "#DCDCF6"
+    }
+]
 
 vote_list = {
     "10.10.10.1": 1,
@@ -60,6 +90,8 @@ vote_list = {
     "10.10.15.15": 6,
 }
 
+idea_list_dict = {idea['idea_id']: idea for idea in idea_list}
+
 
 @app.route('/get_idea_list', methods=['GET'])
 def get_idea_list():
@@ -69,11 +101,14 @@ def get_idea_list():
             result[value] = 0
         result[value] += 1     # 6 : 153
 
+
     result_data = []
     for idea_id, idea_count in result.items():
         result_data.append({
             "idea_id": idea_id,
-            "idea_name": idea_list[idea_id],
+            "idea_name": idea_list_dict[idea_id]['idea_name'],
+            "idea_description": idea_list_dict[idea_id]['idea_description'],
+            "idea_background": idea_list_dict[idea_id]['idea_background'],
             "idea_count": idea_count
         })
     return jsonify(result_data)

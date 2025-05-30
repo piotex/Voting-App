@@ -45,14 +45,32 @@ export default function IdeaList({ children }: IdeaListProps) {
     );
   }
   if (ideaList) {
+    const arrayOne: IdeaModel[] = [];
+    const arrayTwo: IdeaModel[] = [];
+    ideaList.forEach((idea, index) => {
+      if (index % 2 === 0) {
+        arrayOne.push(idea);
+      } else {
+        arrayTwo.push(idea);
+      }
+    });
+
     content = (
-      <ul>
-        {ideaList?.map((model, index) => (
-          <IdeaElement key={index} ideaModel={model} />
-        ))}
-      </ul>
+      <div className="ideaList">
+        <div className="ideaListColumn">
+          {arrayOne.map((model, index) => (
+            <IdeaElement key={index} ideaModel={model} />
+          ))}
+        </div>
+        <div className="ideaListColumn">
+          {arrayTwo.map((model, index) => (
+            <IdeaElement key={index} ideaModel={model} />
+          ))}
+        </div>
+        {children}
+      </div>
     );
   }
 
-  return <div className="ideaList">{content}</div>;
+  return <div>{content}</div>;
 }
