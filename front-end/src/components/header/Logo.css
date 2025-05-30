@@ -1,0 +1,31 @@
+/* .header-logo {
+} */
+
+.header-logo a {
+  display: flex;
+  text-decoration: none;
+}
+
+.header-logo img {
+  height: 25px;
+  vertical-align: middle;
+  animation: App-logo-spin infinite 5s linear;
+}
+.logo-space-1 {
+  width: 10px;
+}
+
+.logo-space-text {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #000;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
