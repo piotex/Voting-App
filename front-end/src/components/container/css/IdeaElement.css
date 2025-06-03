@@ -1,53 +1,33 @@
-/* src/components/IdeaElement.css */
-
 .idea-element {
-  display: flex;
-  flex-grow: 1;
-  flex-direction: column;
-  justify-content: space-between;
-
-  margin: 10px;
-  vertical-align: top;
-
   background-color: #ccc;
   border-radius: 15px;
-  padding: 15px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+  padding: 15px;
   overflow: hidden;
-}
-@media (min-width: 1200px) {
-  .idea-element {
-    width: 550px;
-    margin: 10px auto;
-  }
 }
 
 .idea-title {
-  font-size: 0.8em;
+  font-size: 1.2em;
   font-weight: bold;
   color: #333;
   margin-bottom: 10px;
   overflow: hidden;
 }
-
 .idea-short-description {
-  font-size: 0.8em;
-  font-weight: 400;
-  color: #5f5f5f;
+  font-size: 1em;
+  font-weight: 500;
+  color: #494949;
   margin-bottom: 15px;
-  /* max-height: 5em; */
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-
 .idea-actions {
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
 }
-
 .idea-button {
   flex-grow: 1;
   padding: 8px 12px;
@@ -58,14 +38,12 @@
   font-weight: bold;
   text-align: center;
 }
-
 .idea-button-desc {
   background-color: white;
   color: #333;
   border: 1px solid #ccc;
   margin-right: 10px;
 }
-
 .idea-button-desc:hover {
   background-color: #f0f0f0;
 }
@@ -79,4 +57,32 @@
 
 .idea-button-count:hover {
   background-color: #f0f0f0;
+}
+
+.idea-button-active {
+  background-color: #4cff73;
+  color: rgb(0, 151, 50);
+}
+.idea-button-active:hover {
+  background-color: #48ed6c;
+  color: rgb(0, 119, 40);
+}
+
+@media (min-width: 900px) {
+  .idea-element {
+    width: 90%;
+    margin: 10px auto;
+  }
+}
+
+@media (max-width: 900px) {
+  .idea-element {
+    margin: 10px;
+  }
+  .idea-short-description {
+    font-size: 0.8em;
+  }
+  .idea-title {
+    font-size: 1em;
+  }
 }

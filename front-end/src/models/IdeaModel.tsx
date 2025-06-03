@@ -4,4 +4,5 @@ export type IdeaModel = {
   idea_description: string;
   idea_background: string;
   idea_count: number;
+  idea_is_selected: boolean;
 };

@@ -13,7 +13,7 @@ export default function IdeaList({ children }: IdeaListProps) {
   const [ideaList, setIdeaList] = useState<IdeaModel[]>();
   const [isFetching, setIsFetching] = useState(false);
 
-  const voteOnIdeaApi = async (option: number) => {
+  const voteOnIdea = async (option: number) => {
     await fetch(`${API_BASE_URL}/vote/${option}`, {
       method: "POST",
       headers: {
@@ -21,6 +21,10 @@ export default function IdeaList({ children }: IdeaListProps) {
       },
     });
     getIdeas();
+  };
+
+  const showIdeaDescription = (option: number) => {
+    console.log(`Show description for idea with ID: ${option}`);
   };
 
   const getIdeas = async () => {
@@ -34,22 +38,24 @@ export default function IdeaList({ children }: IdeaListProps) {
     getIdeas();
   }, []);
 
-  // const getSelectedIdea = () => {}
-
   let content: ReactNode;
   if (isFetching) {
     content = <p>Loading... </p>;
   }
   if (ideaList) {
-    const arrayOne: IdeaModel[] = [];
+    const arrayOne = ideaList.filter((idea) => idea.idea_is_selected);
     const arrayTwo: IdeaModel[] = [];
-    ideaList.forEach((idea, index) => {
-      if (index % 2 === 0) {
-        arrayOne.push(idea);
-      } else {
-        arrayTwo.push(idea);
-      }
-    });
+
+    ideaList
+      .filter((idea) => !idea.idea_is_selected)
+      .sort((a, b) => b.idea_count - a.idea_count)
+      .forEach((idea, index) => {
+        if (index % 2 === 0) {
+          arrayTwo.push(idea);
+        } else {
+          arrayOne.push(idea);
+        }
+      });
 
     content = (
       <div className="ideaList">
@@ -58,7 +64,8 @@ export default function IdeaList({ children }: IdeaListProps) {
             <IdeaElement
               key={index}
               ideaModel={model}
-              handleVote={voteOnIdeaApi}
+              handleVote={voteOnIdea}
+              handleDescription={showIdeaDescription}
             />
           ))}
         </div>
@@ -67,7 +74,8 @@ export default function IdeaList({ children }: IdeaListProps) {
             <IdeaElement
               key={index}
               ideaModel={model}
-              handleVote={voteOnIdeaApi}
+              handleVote={voteOnIdea}
+              handleDescription={showIdeaDescription}
             />
           ))}
         </div>

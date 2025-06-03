@@ -3,18 +3,16 @@ import { IdeaModel } from "../../models/IdeaModel";
 import "./css/IdeaElement.css";
 
 interface IdeaElementProps {
-  handleVote: (option: number) => void;
   ideaModel: IdeaModel;
+  isActive?: boolean;
+  handleVote: (option: number) => void;
+  handleDescription: (option: number) => void;
 }
-
-const vodeOnIdea = (event: React.MouseEvent<HTMLButtonElement>) => {
-  console.log("Kliknięto w przycisk Opis");
-  event.stopPropagation();
-};
 
 export default function IdeaElement({
   ideaModel,
   handleVote,
+  handleDescription,
 }: IdeaElementProps) {
   return (
     <div
@@ -29,12 +27,22 @@ export default function IdeaElement({
         </div>
       </div>
       <div className="idea-actions">
-        <button className="idea-button idea-button-desc" onClick={vodeOnIdea}>
+        <div
+          className="idea-button idea-button-desc"
+          onClick={(event) => {
+            handleDescription(ideaModel.idea_id);
+            event.stopPropagation();
+          }}
+        >
           Opis
-        </button>
-        <button className="idea-button idea-button-count">
+        </div>
+        <div
+          className={`idea-button idea-button-count idea-button${
+            ideaModel.idea_is_selected ? "-active" : ""
+          }`}
+        >
           {ideaModel.idea_count}
-        </button>
+        </div>
       </div>
     </div>
   );

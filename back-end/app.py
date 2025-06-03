@@ -95,6 +95,7 @@ idea_list_dict = {idea['idea_id']: idea for idea in idea_list}
 
 @app.route('/get_idea_list', methods=['GET'])
 def get_idea_list():
+    ip_address = request.remote_addr
     result = {}
     for key, value in vote_list.items():
         if value not in result:
@@ -109,7 +110,8 @@ def get_idea_list():
             "idea_name": idea_list_dict[idea_id]['idea_name'],
             "idea_description": idea_list_dict[idea_id]['idea_description'],
             "idea_background": idea_list_dict[idea_id]['idea_background'],
-            "idea_count": idea_count
+            "idea_count": idea_count,
+            "idea_is_selected": ip_address in vote_list and vote_list[ip_address] == idea_id
         })
     return jsonify(result_data)
 
@@ -123,7 +125,7 @@ def vote(option):
         return jsonify({'error': 'Invalid option'}), 400
     
     ip_address = request.remote_addr
-    ip_address = int(time.time() * 1000000)         # workaround for my ip address
+    # ip_address = int(time.time() * 1000000)         # workaround for my ip address
     vote_list[ip_address] = int(option)
     return jsonify({'message': f'Vote for {option} recorded.'})
 
@@ -138,14 +140,6 @@ def add_idea():
         return jsonify({"error": "Idea name is required"}), 400
     vote_list[ip_address] = idea_id
     return jsonify({"vote": idea_id})
-
-
-@app.route('/get_selected_idea', methods=['GET'])
-def get_selected_idea():
-    ip_address = request.remote_addr
-    if ip_address not in vote_list:
-        return jsonify({"vote": ""})
-    return jsonify({"vote": vote_list[ip_address]})
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')

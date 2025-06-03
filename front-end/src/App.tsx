@@ -5,6 +5,7 @@ import Logo from "./components/header/Logo";
 import Menu from "./components/header/Menu";
 import Container from "./components/container/Container";
 import IdeaList from "./components/container/IdeaList";
+import ContainerAddIdea from "./components/container/ContainerAddIdea";
 
 function App() {
   return (
@@ -13,9 +14,8 @@ function App() {
         <Logo />
         <Menu />
       </Header>
-      <Container>
-        <IdeaList />
-      </Container>
+      <IdeaList />
+      <ContainerAddIdea />
     </div>
   );
 }

@@ -4,3 +4,9 @@
   /* background-color: aqua; */
   /* display: grid; */
 }
+
+/* @media (min-width: 1200px) {
+  .idea-element {
+    display: inline-block;
+  }
+} */
