@@ -1,6 +1,6 @@
 import React from "react";
 import { IdeaModel } from "../../models/IdeaModel";
-import "./IdeaElement.css";
+import "./css/IdeaElement.css";
 
 interface IdeaElementProps {
   handleVote: (option: number) => void;

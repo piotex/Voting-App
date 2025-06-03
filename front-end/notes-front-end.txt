@@ -1,4 +1,7 @@
 cd github/Voting-App
 yarn create react-app front-end --template typescript
 
-cd & cd github/Voting-App/front-end & yarn start
+
+
+cd /home/peter/github/Voting-App/front-end 
+yarn start
