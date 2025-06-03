@@ -6,7 +6,7 @@ interface IdeaElementProps {
   ideaModel: IdeaModel;
   isActive?: boolean;
   handleVote: (option: number) => void;
-  handleDescription: (option: number) => void;
+  handleDescription: (item: IdeaModel) => void;
 }
 
 export default function IdeaElement({
@@ -30,7 +30,7 @@ export default function IdeaElement({
         <div
           className="idea-button idea-button-desc"
           onClick={(event) => {
-            handleDescription(ideaModel.idea_id);
+            handleDescription(ideaModel);
             event.stopPropagation();
           }}
         >

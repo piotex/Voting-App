@@ -1,10 +1,48 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import sys
+import random
 import time
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": ["http://127.0.0.1:3000", "http://localhost:3000"]}})
+
+def generate_random_pastel_hex_color_no_libs():
+    hue = random.randint(0, 359)
+    saturation = random.randint(20, 50)
+    lightness = random.randint(75, 90)
+
+    h = hue / 360.0
+    s = saturation / 100.0
+    l = lightness / 100.0
+
+    if s == 0:
+        r_norm, g_norm, b_norm = l, l, l
+    else:
+        def hue_to_rgb(p, q, t):
+            if t < 0: t += 1
+            if t > 1: t -= 1
+            if t < 1/6: return p + (q - p) * 6 * t
+            if t < 1/2: return q
+            if t < 2/3: return p + (q - p) * (2/3 - t) * 6
+            return p
+
+        q = l * (1 + s) if l < 0.5 else l + s - l * s
+        p = 2 * l - q
+
+        r_norm = hue_to_rgb(p, q, h + 1/3)
+        g_norm = hue_to_rgb(p, q, h)
+        b_norm = hue_to_rgb(p, q, h - 1/3)
+
+    r = round(r_norm * 255)
+    g = round(g_norm * 255)
+    b = round(b_norm * 255)
+
+    r = max(0, min(255, r))
+    g = max(0, min(255, g))
+    b = max(0, min(255, b))
+
+    hex_color = '#{:02x}{:02x}{:02x}'.format(r, g, b)
+    return hex_color
 
 idea_list = [
     {
@@ -90,56 +128,62 @@ vote_list = {
     "10.10.15.15": 6,
 }
 
-idea_list_dict = {idea['idea_id']: idea for idea in idea_list}
-
 
 @app.route('/get_idea_list', methods=['GET'])
 def get_idea_list():
     ip_address = request.remote_addr
-    result = {}
-    for key, value in vote_list.items():
-        if value not in result:
-            result[value] = 0
-        result[value] += 1     # 6 : 153
-
+    
+    idea_counts = {}
+    for idea_id in vote_list.values():
+        idea_counts[idea_id] = idea_counts.get(idea_id, 0) + 1
 
     result_data = []
-    for idea_id, idea_count in result.items():
+    for idea in idea_list:
         result_data.append({
-            "idea_id": idea_id,
-            "idea_name": idea_list_dict[idea_id]['idea_name'],
-            "idea_description": idea_list_dict[idea_id]['idea_description'],
-            "idea_background": idea_list_dict[idea_id]['idea_background'],
-            "idea_count": idea_count,
-            "idea_is_selected": ip_address in vote_list and vote_list[ip_address] == idea_id
+            "idea_id": idea['idea_id'],
+            "idea_name": idea['idea_name'],
+            "idea_description": idea['idea_description'],
+            "idea_background": idea['idea_background'],
+            "idea_count": idea_counts.get(idea['idea_id'], 0),
+            "idea_is_selected": ip_address in vote_list and vote_list[ip_address] == idea['idea_id']
         })
+    
     return jsonify(result_data)
 
-@app.route('/vote/<option>', methods=['POST'])
-def vote(option):
-    if not option or not option.isdigit():
-        return jsonify({'error': 'Invalid option'}), 400
-    
-    option = int(option)
-    if (option) not in idea_list_dict:
-        return jsonify({'error': 'Invalid option'}), 400
+@app.route('/vote/<int:option_id>', methods=['POST'])
+def vote(option_id):
+    idea_id_list =  [idea['idea_id'] for idea in idea_list]
+    if option_id not in idea_id_list:
+        return jsonify({'error': 'Invalid option ID'}), 400
     
     ip_address = request.remote_addr
-    # ip_address = int(time.time() * 1000000)         # workaround for my ip address
-    vote_list[ip_address] = int(option)
-    return jsonify({'message': f'Vote for {option} recorded.'})
+    # ip_address = str(int(time.time() * 1000000)) 
 
+    vote_list[ip_address] = option_id
+    return jsonify({'message': f'Vote for {option_id} recorded.'})
 
 @app.route('/add_idea', methods=['POST'])
 def add_idea():
-    ip_address = request.remote_addr
-    ip_address = int(time.time() * 1000000)         # workaround for my ip address
     data = request.get_json()
-    idea_id = data.get('idea_id')
-    if not idea_id:
-        return jsonify({"error": "Idea name is required"}), 400
-    vote_list[ip_address] = idea_id
-    return jsonify({"vote": idea_id})
+    if data.get('idea_name') in [idea['idea_name'] for idea in idea_list]:
+        return jsonify({"error": "Idea with this name already exists"}), 400
+    if not 'idea_name' in data or not 'idea_description' in data or not data.get('idea_name') or not data.get('idea_description'):
+        return jsonify({"error": "Idea name and description are required"}), 400
+
+    ip_address = request.remote_addr
+    # ip_address = str(int(time.time() * 1000000))
+    idea_name = data.get('idea_name')
+    idea_description = data.get('idea_description')
+    next_idea_id = max(idea['idea_id'] for idea in idea_list) + 1
+    new_idea = {
+        "idea_id": next_idea_id,
+        "idea_name": idea_name,
+        "idea_description": idea_description,
+        "idea_background": generate_random_pastel_hex_color_no_libs()
+    }
+    idea_list.append(new_idea)
+    vote_list[ip_address] = next_idea_id
+    return jsonify({"message": "Idea added successfully", "idea_id": next_idea_id}), 201
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')

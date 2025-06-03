@@ -2,6 +2,7 @@ import { ReactNode, useEffect, useState } from "react";
 import { IdeaModel } from "../../models/IdeaModel";
 import IdeaElement from "./IdeaElement";
 import "./css/IdeaList.css";
+import IdeaDescription from "./IdeaDescription";
 
 const API_BASE_URL = "http://127.0.0.1:5000";
 
@@ -12,6 +13,8 @@ interface IdeaListProps {
 export default function IdeaList({ children }: IdeaListProps) {
   const [ideaList, setIdeaList] = useState<IdeaModel[]>();
   const [isFetching, setIsFetching] = useState(false);
+  const [itemDescriptionToShow, setItemDescriptionToShow] =
+    useState<IdeaModel | null>(null);
 
   const voteOnIdea = async (option: number) => {
     await fetch(`${API_BASE_URL}/vote/${option}`, {
@@ -20,11 +23,12 @@ export default function IdeaList({ children }: IdeaListProps) {
         "Content-Type": "application/json",
       },
     });
+    setItemDescriptionToShow(null);
     getIdeas();
   };
 
-  const showIdeaDescription = (option: number) => {
-    console.log(`Show description for idea with ID: ${option}`);
+  const showIdeaDescription = (item: IdeaModel) => {
+    setItemDescriptionToShow(item);
   };
 
   const getIdeas = async () => {
@@ -81,6 +85,14 @@ export default function IdeaList({ children }: IdeaListProps) {
         </div>
         {children}
       </div>
+    );
+  }
+  if (itemDescriptionToShow) {
+    content = (
+      <IdeaDescription
+        ideaModel={itemDescriptionToShow}
+        handleVote={voteOnIdea}
+      />
     );
   }
 
