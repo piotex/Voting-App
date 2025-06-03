@@ -92,6 +92,7 @@ export default function IdeaList({ children }: IdeaListProps) {
       <IdeaDescription
         ideaModel={itemDescriptionToShow}
         handleVote={voteOnIdea}
+        handleClose={() => setItemDescriptionToShow(null)}
       />
     );
   }

@@ -5,20 +5,20 @@ import "./css/IdeaDescription.css";
 interface IdeaDescriptionProps {
   ideaModel: IdeaModel;
   handleVote: (item: number) => void;
+  handleClose: () => void;
 }
 
 export default function IdeaDescription({
   ideaModel,
   handleVote,
+  handleClose,
 }: IdeaDescriptionProps) {
-  const onClose = () => {
-    window.location.href = "/";
-  };
-
   return (
     <div className="idea-description-overlay">
       <div className="idea-description-modal">
-        <button className="idea-description-close-button">&times;</button>
+        <button className="idea-description-close-button" onClick={handleClose}>
+          &times;
+        </button>
         <h2 className="idea-description-name">{ideaModel.idea_name}</h2>
         <p className="idea-description-text">{ideaModel.idea_description}</p>
         <p
