@@ -3,12 +3,7 @@ import { IdeaModel } from "../../models/IdeaModel";
 import IdeaElement from "./IdeaElement";
 import "./css/IdeaList.css";
 import IdeaDescription from "./IdeaDescription";
-
-// const API_URL = "http://127.0.0.1:5000";
-const GET_IDEA_LIST_API =
-  "https://0aucwc87u2.execute-api.eu-central-1.amazonaws.com/default/get_idea_list";
-const SET_VOTE_API =
-  "https://0aucwc87u2.execute-api.eu-central-1.amazonaws.com/default/get_idea_list";
+import { GET_IDEA_LIST_API, SET_VOTE_API } from "../../constants/api";
 
 interface IdeaListProps {
   children?: React.ReactNode;
@@ -21,14 +16,19 @@ export default function IdeaList({ children }: IdeaListProps) {
     useState<IdeaModel | null>(null);
 
   const voteOnIdea = async (option: number) => {
+    setIsFetching(true);
     await fetch(SET_VOTE_API, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
+      body: JSON.stringify({
+        vote: option,
+      }),
     });
     setItemDescriptionToShow(null);
     getIdeas();
+    setIsFetching(false);
   };
 
   const showIdeaDescription = (item: IdeaModel) => {
@@ -47,9 +47,6 @@ export default function IdeaList({ children }: IdeaListProps) {
   }, []);
 
   let content: ReactNode;
-  if (isFetching) {
-    content = <p>Loading... </p>;
-  }
   if (ideaList) {
     const arrayOne = ideaList.filter((idea) => idea.idea_is_selected);
     const arrayTwo: IdeaModel[] = [];
@@ -99,6 +96,9 @@ export default function IdeaList({ children }: IdeaListProps) {
         handleClose={() => setItemDescriptionToShow(null)}
       />
     );
+  }
+  if (isFetching) {
+    content = <p>Loading... </p>;
   }
 
   return <div>{content}</div>;
