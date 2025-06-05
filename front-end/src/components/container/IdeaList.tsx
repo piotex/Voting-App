@@ -4,7 +4,11 @@ import IdeaElement from "./IdeaElement";
 import "./css/IdeaList.css";
 import IdeaDescription from "./IdeaDescription";
 
-const API_BASE_URL = "http://127.0.0.1:5000";
+// const API_URL = "http://127.0.0.1:5000";
+const GET_IDEA_LIST_API =
+  "https://0aucwc87u2.execute-api.eu-central-1.amazonaws.com/default/get_idea_list";
+const SET_VOTE_API =
+  "https://0aucwc87u2.execute-api.eu-central-1.amazonaws.com/default/get_idea_list";
 
 interface IdeaListProps {
   children?: React.ReactNode;
@@ -17,7 +21,7 @@ export default function IdeaList({ children }: IdeaListProps) {
     useState<IdeaModel | null>(null);
 
   const voteOnIdea = async (option: number) => {
-    await fetch(`${API_BASE_URL}/vote/${option}`, {
+    await fetch(SET_VOTE_API, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -33,7 +37,7 @@ export default function IdeaList({ children }: IdeaListProps) {
 
   const getIdeas = async () => {
     setIsFetching(true);
-    const response = await fetch(`${API_BASE_URL}/get_idea_list`);
+    const response = await fetch(GET_IDEA_LIST_API);
     const data = (await response.json()) as IdeaModel[];
     setIdeaList(data);
     setIsFetching(false);
