@@ -199,3 +199,7 @@ cython_debug/
 /front-endyarn-error.log*
 
 /back-end/.venv
+.terraform.lock.hcl
+*.zip
+*.tfplan
+*.terraform

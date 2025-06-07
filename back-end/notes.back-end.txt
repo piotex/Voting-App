@@ -1,0 +1,12 @@
+sudo apt install python3.12-venv
+python3 -m venv .venv
+
+
+
+cd /home/peter/github/Voting-App/back-end
+source .venv/bin/activate
+pip install -r requirements.txt
+
+python get_idea_list.lambda.py
+
+flask run --port 5000
