@@ -40,8 +40,15 @@ module "lambda_get_idea_list" {
 
 module "api-gateway" {
     source = "./api-gateway" 
-    lambda_invoke_arn = module.lambda_get_idea_list.invoke_arn 
-    lambda_function_name = module.lambda_get_idea_list.function_name
+    lambdas_map = {
+      "${module.lambda_get_idea_list.function_name}" = {
+        lambda_name       = module.lambda_get_idea_list.function_name
+        lambda_invoke_arn = module.lambda_get_idea_list.invoke_arn 
+      },
+    }
+
+    # lambda_invoke_arn = module.lambda_get_idea_list.invoke_arn 
+    # lambda_function_name = module.lambda_get_idea_list.function_name
 }
 
 
