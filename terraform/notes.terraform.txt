@@ -5,3 +5,7 @@ terraform apply
 terraform destroy
 
 (echo -e "===Name=== ===ARN===" && terraform show -json | jq -r '.values.root_module.resources[] | "\(.name)\t\(.values.arn)"') | column -t
+
+
+terraform init && terraform plan -out="deployment_plan.tfplan"
+terraform apply "deployment_plan.tfplan"
