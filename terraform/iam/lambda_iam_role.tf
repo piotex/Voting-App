@@ -1,6 +1,10 @@
-resource "aws_iam_role" "lambda_exec_role" {
-  name = "lambda_exec_role_http_api_from_file"
+variable "dynamodb_target_arns" {
+  description = "A list of DynamoDB table ARNs that the Lambda role should have access to."
+  type        = list(string)
+}
 
+resource "aws_iam_role" "lambda_dynamodb_role" {
+  name = "lambda_dynamodb_role"
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -15,8 +19,10 @@ resource "aws_iam_role" "lambda_exec_role" {
   })
 }
 
-resource "aws_iam_role_policy_attachment" "lambda_logging" {
-  role       = aws_iam_role.lambda_exec_role.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+resource "aws_iam_role_policy" "lambda_dynamodb_policy" {
+  name   = "lambda_dynamodb_policy"
+  role   = aws_iam_role.lambda_dynamodb_role.id
+  policy = templatefile("${path.module}/files/iam_dynamodb_policy_template.json.tpl", {
+    table_arns = var.dynamodb_target_arns
+  })
 }
-

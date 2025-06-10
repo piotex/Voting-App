@@ -5,14 +5,14 @@ def init_voting_app_idea_list():
     data = [
         {   
             "id": 1,
-            "name": "RenovaAI: Twój Inteligentny Remont Od A do Z",
-            "description": "Kompleksowa Platforma AI do Bezstresowych Remontów. Od Wizji po Realizację - Planowanie, Wykonawcy, Materiały w Jednym Miejscu.",
+            "name": "Kliknij pomysł który chcesz żebym zrobił pod koniec tygodnia",
+            "description": "Weź coś kliknij ;)",
             "background": "#D6F6D6"
         },
         {
             "id": 2,
-            "name": "Klucz do Przyszłości. Odkryj Potęgę Technologii - Od Programowania po Cyberbezpieczeństwo",
-            "description": "Klucz do Przyszłości. Odkryj Potęgę Technologii - Od Programowania po Cyberbezpieczeństwo. Twoja Droga do Świata IT.",
+            "name": "Pomysł wart milion $",
+            "description": "Wstać z łóżka i zacząć działać xD",
             "background": "#D6E8FF"
         }
     ]

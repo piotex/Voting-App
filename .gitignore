@@ -203,3 +203,5 @@ cython_debug/
 *.zip
 *.tfplan
 *.terraform
+yarn.lock
+.yarn-integrity

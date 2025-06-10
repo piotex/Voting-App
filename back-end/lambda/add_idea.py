@@ -2,6 +2,19 @@ import sys
 import json
 import boto3
 import random
+import time
+
+dynamodb = boto3.resource('dynamodb', region_name='eu-central-1') 
+table = dynamodb.Table('voting-app-idea-list')
+
+def get_ip_address(event):
+    tmp = event.get('requestContext', {}).get('http', {}).get('sourceIp')
+    if tmp:
+        return tmp
+    tmp = event.get('requestContext', {}).get('identity', {}).get('sourceIp')
+    if tmp:
+        return tmp
+    print(f"IP address not found in event. event: {event}", file=sys.stderr)
 
 def generate_random_pastel_hex_color_no_libs():
     hue = random.randint(0, 359)
@@ -56,10 +69,10 @@ def lambda_handler(event, context):
             'body': '' 
         }
 
+    ip_address = get_ip_address(event)
     body = json.loads(event['body'])
     idea_name = body.get('idea_name')
     idea_description = body.get('idea_description')
-    ip_address = event['requestContext']['http']['sourceIp']
 
     if not idea_name or not idea_description:
         return {
@@ -70,17 +83,7 @@ def lambda_handler(event, context):
         'body': json.dumps({'message': 'idea_name and idea_description are required'})
     }
 
-    # ip_address = str(int(time.time() * 1000000))
-    dynamodb = boto3.resource('dynamodb', region_name='eu-central-1') 
-    table = dynamodb.Table('voting-app-idea-list')
-    response = table.scan(
-            ProjectionExpression='#id_attr',
-            ExpressionAttributeNames={'#id_attr': 'id'}
-        )
-    items = response['Items']
-    next_idea_id = max(item['id'] for item in items) + 1
-
-    table = dynamodb.Table('voting-app-idea-list')
+    next_idea_id = int(time.time() * 1000)
     table.put_item(Item={
         "id": next_idea_id,
         "name": idea_name,

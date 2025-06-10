@@ -42,6 +42,7 @@ export default function IdeaList({ children }: IdeaListProps) {
     setIdeaList(data);
     setIsFetching(false);
   };
+
   useEffect(() => {
     getIdeas();
   }, []);
@@ -98,7 +99,11 @@ export default function IdeaList({ children }: IdeaListProps) {
     );
   }
   if (isFetching) {
-    content = <p>Loading... </p>;
+    content = (
+      <div className="loadingDivMain">
+        <div className="loadingDiv">Loading... </div>
+      </div>
+    );
   }
 
   return <div>{content}</div>;
