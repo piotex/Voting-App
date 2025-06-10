@@ -2,6 +2,7 @@ provider "aws" {
   region = "eu-central-1" 
 }
 
+# ========== Back End ==========================
 module "voting_app_idea_list" {
   source     = "./dynamodb"
   table_name = "voting-app-idea-list"
@@ -70,7 +71,24 @@ module "api-gateway" {
     }
 }
 
+# ========== Front End ==========================
+variable "s3_bucket_name" {
+  type        = string
+  default     = "voting-app-kubon-tech"
+}
 
-# T-O-D-O 
-# - one api gateway with multiple stages - represent lambda andpionts
+module "s3_website_bucket" {
+  source       = "./s3"
+  bucket_name  = var.s3_bucket_name
+}
+
+module "cloudfront_cdn" {
+  source                   = "./cloudfront"
+  s3_bucket_name           = var.s3_bucket_name
+  s3_bucket_id             = module.s3_website_bucket.bucket_id
+  s3_bucket_arn            = module.s3_website_bucket.bucket_arn
+  s3_bucket_regional_domain_name = module.s3_website_bucket.bucket_regional_domain_name
+}
+
+
 
