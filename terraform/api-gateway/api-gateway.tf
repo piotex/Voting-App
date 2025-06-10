@@ -7,7 +7,7 @@ variable "lambda_function_name" {
 }
 
 resource "aws_apigatewayv2_api" "http_api_lambda" {
-  name          = "MyHttpApiLambdaFromFile"
+  name          = "voting-app-api-tf"
   protocol_type = "HTTP"
 }
 
@@ -20,13 +20,13 @@ resource "aws_apigatewayv2_integration" "lambda_integration" {
 
 resource "aws_apigatewayv2_route" "hello_route" {
   api_id    = aws_apigatewayv2_api.http_api_lambda.id
-  route_key = "GET /hello" 
+  route_key = "ANY /${var.lambda_function_name}" 
   target    = "integrations/${aws_apigatewayv2_integration.lambda_integration.id}"
 }
 
 resource "aws_apigatewayv2_stage" "default_stage" {
   api_id      = aws_apigatewayv2_api.http_api_lambda.id
-  name        = "$default" 
+  name        = "api" 
   auto_deploy = true
 }
 
